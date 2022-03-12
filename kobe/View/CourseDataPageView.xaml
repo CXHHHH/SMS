@@ -1,0 +1,239 @@
+﻿<UserControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:kobe.View"
+             xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2" x:Class="kobe.View.CourseDataPageView"
+             mc:Ignorable="d" x:Name="courseInfo"
+             d:DesignHeight="450" d:DesignWidth="1250">
+    <UserControl.Resources>
+
+        <ControlTemplate TargetType="{x:Type Button}" x:Key="CommitButtonTemplate">
+            <Border Background="#007DFA" CornerRadius="10">
+                <Grid>
+                    <Border CornerRadius="4" Background="#22FFFFFF" x:Name="back" Visibility="Hidden"/>
+                    <ContentControl Content="{TemplateBinding Content}"
+                                            VerticalAlignment="Center"
+                                            HorizontalAlignment="Center"
+                                            Foreground="{TemplateBinding Foreground}"/>
+                </Grid>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Visibility" Value="Visible" TargetName="back"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+
+        <SolidColorBrush x:Key="TextBox.Static.Border" Color="#FFABAdB3"/>
+        <SolidColorBrush x:Key="TextBox.MouseOver.Border" Color="#FF7EB4EA"/>
+        <SolidColorBrush x:Key="TextBox.Focus.Border" Color="#FF569DE5"/>
+
+        <Style x:Key="CourseTextBoxStyle" TargetType="{x:Type TextBox}">
+            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource TextBox.Static.Border}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="KeyboardNavigation.TabNavigation" Value="None"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="AllowDrop" Value="true"/>
+            <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst"/>
+            <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TextBox}">
+                        <Border x:Name="border" BorderThickness="0" Background="White" SnapsToDevicePixels="True"
+                        CornerRadius="10">
+                            <Grid>
+                                <TextBlock Text="请输入姓名" Grid.Column="1" VerticalAlignment="Center" Foreground="White" x:Name="mt" Visibility="Collapsed"/>
+                                <ScrollViewer x:Name="PART_ContentHost" Grid.Column="1" Focusable="false" HorizontalScrollBarVisibility="Hidden" 
+                                  VerticalScrollBarVisibility="Hidden" VerticalAlignment="Center" 
+                                  Background="Transparent"/>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Opacity" TargetName="border" Value="0.56"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource TextBox.MouseOver.Border}"/>
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource TextBox.Focus.Border}"/>
+                            </Trigger>
+                            <DataTrigger Binding="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" Value="">
+                                <Setter TargetName="mt" Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsInactiveSelectionHighlightEnabled" Value="true"/>
+                        <Condition Property="IsSelectionActive" Value="false"/>
+                    </MultiTrigger.Conditions>
+                    <Setter Property="SelectionBrush" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey}}"/>
+                </MultiTrigger>
+            </Style.Triggers>
+        </Style>
+
+
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="3*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Border  Background="Gray" />
+
+        <Border  Background="Gray" Grid.Row="1"/>
+
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" >
+                <TextBlock Text="课程名" FontSize="16" VerticalAlignment="Center" FontWeight="Bold"/>
+                <TextBox  Height="32" Width="180" Margin="10,0" Text="{Binding CourseModel.CourseName}" Style="{StaticResource CourseTextBoxStyle}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="1">
+                <TextBlock Text="课程类别" FontSize="16" VerticalAlignment="Center" FontWeight="Bold"/>
+                <TextBox  Height="32" Width="180" Margin="10,0" Text="{Binding CourseModel.CourseType}" Style="{StaticResource CourseTextBoxStyle}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="2">
+                <TextBlock Text="课时" FontSize="16" VerticalAlignment="Center" FontWeight="Bold"/>
+                <ComboBox Height="32" Width="180"  Margin="10,0" Name="ch" SelectedIndex="{Binding CourseModel.CourseHour}">
+                    <ComboBoxItem Content="" ></ComboBoxItem>
+                    <ComboBoxItem Content="1小时"></ComboBoxItem>
+                    <ComboBoxItem Content="2小时"></ComboBoxItem>
+                    <ComboBoxItem Content="3小时"></ComboBoxItem>
+                    <ComboBoxItem Content="4小时"></ComboBoxItem>
+                    <ComboBoxItem Content="5小时"></ComboBoxItem>
+                    <ComboBoxItem Content="6小时"></ComboBoxItem>
+                </ComboBox>
+            </StackPanel>
+            <!--<StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="3">
+                <TextBlock Text="课周" FontSize="16" VerticalAlignment="Center" FontWeight="Bold"/>
+                <ComboBox Height="32" Width="180"  Margin="10,0" Name="cw" SelectedValue="{Binding CourseModel.CourseWeek}">
+                    <ComboBoxItem Content="周一"></ComboBoxItem>
+                    <ComboBoxItem Content="周二"></ComboBoxItem>
+                    <ComboBoxItem Content="周三"></ComboBoxItem>
+                    <ComboBoxItem Content="周四"></ComboBoxItem>
+                    <ComboBoxItem Content="周五"></ComboBoxItem>
+                    <ComboBoxItem Content="周六"></ComboBoxItem>
+                    <ComboBoxItem Content="周日"></ComboBoxItem>
+                </ComboBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="4">
+                <TextBlock Text="节课" FontSize="16" VerticalAlignment="Center" FontWeight="Bold"/>
+                <ComboBox Height="32" Width="180"  Margin="10,0" Name="cc" SelectedValue="{Binding CourseModel.CourseClass}">
+                    <ComboBoxItem Content="第一节"></ComboBoxItem>
+                    <ComboBoxItem Content="第二节"></ComboBoxItem>
+                    <ComboBoxItem Content="第三节"></ComboBoxItem>
+                    <ComboBoxItem Content="第四节"></ComboBoxItem>
+                    <ComboBoxItem Content="第五节"></ComboBoxItem>
+                    <ComboBoxItem Content="第六节"></ComboBoxItem>
+                    <ComboBoxItem Content="第七节"></ComboBoxItem>
+                    <ComboBoxItem Content="第八节"></ComboBoxItem>
+                </ComboBox>
+            </StackPanel>-->
+            
+            <!--<StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="3">
+                <TextBlock Text="任课老师" FontSize="16" VerticalAlignment="Center" FontWeight="Bold"/>
+                <ComboBox Height="32" Width="180"  Margin="10,0" ItemsSource="{Binding teacherlist}" 
+                          DisplayMemberPath="TeaName" SelectedValuePath="TeaID" SelectedValue="{Binding CourseModel.CourseTeaId}" />
+            </StackPanel>-->
+
+            <StackPanel Orientation="Horizontal"  Grid.Row="3" HorizontalAlignment="Center">
+                <Button Content="清空" Grid.Row="6" Height="32" Width="100" Margin="10,0"  Foreground="White" FontSize="16"
+                        Template="{StaticResource CommitButtonTemplate}" Cursor="Hand"/>
+                <Button Content="提交" Grid.Row="6" Height="32" Width="100" Margin="10,0" Foreground="White" FontSize="16"
+                        Template="{StaticResource CommitButtonTemplate}" Cursor="Hand"
+                        Command="{Binding AddCourseInfoCommand}"
+                        CommandParameter="{Binding ElementName=courseInfo}"/>
+            </StackPanel>
+            <TextBlock Text="{Binding ErrorMessage}" Foreground="Red" FontWeight="Bold" Grid.Row="4" Height="40" FontSize="20" 
+                           HorizontalAlignment="Center"/>
+        </Grid>
+
+
+        <StackPanel Grid.Column="1">
+            <Border  Background="Gray" >
+                <Border.Effect>
+                    <DropShadowEffect Color="Gray" ShadowDepth="0" BlurRadius="5" Opacity="0.3" Direction="0" />
+                </Border.Effect>
+                <Grid Height="30">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Border BorderThickness="0,0,1,0" BorderBrush="White" Margin="0,5"/>
+                    <Border BorderThickness="0,0,1,0" BorderBrush="White" Margin="0,5" Grid.Column="1"/>
+                    <Border BorderThickness="0,0,1,0" BorderBrush="White" Margin="0,5" Grid.Column="2"/>
+                    <TextBlock Text="课 程 名" Foreground="White"  VerticalAlignment="Center" 
+                               HorizontalAlignment="Center" FontSize="14" FontWeight="Bold"/>
+                    <TextBlock Text="课程类别" Foreground="White"  VerticalAlignment="Center" 
+                               HorizontalAlignment="Center" FontSize="14" FontWeight="Bold" Grid.Column="1"/>
+                    <TextBlock Text="课   时" Foreground="White"  VerticalAlignment="Center" 
+                               HorizontalAlignment="Center" FontSize="14" FontWeight="Bold" Grid.Column="2"/>
+                    <TextBlock Text="操   作" Foreground="White"  VerticalAlignment="Center" 
+                               HorizontalAlignment="Center" FontSize="14" FontWeight="Bold" Grid.Column="3"/>
+                </Grid>
+            </Border>
+        </StackPanel>
+
+        <ScrollViewer Grid.Column="1" Grid.Row="1" VerticalScrollBarVisibility="Hidden">
+            <ItemsControl ItemsSource="{Binding courselist}" >
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border  Background="White" CornerRadius="5" Margin="0,5">
+                            <Border.Effect>
+                                <DropShadowEffect Color="Gray" ShadowDepth="0" BlurRadius="5" Opacity="0.3" Direction="0" />
+                            </Border.Effect>
+                            <Grid Height="30">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="{Binding CourseID}" Visibility="Hidden"/>
+                                <TextBlock Text="{Binding CourseName}" Foreground="#3F4C5D"  VerticalAlignment="Center" 
+                               HorizontalAlignment="Center" FontSize="14" FontWeight="Bold"/>
+                                <TextBlock Text="{Binding CourseType}" Foreground="#3F4C5D"  VerticalAlignment="Center" 
+                               HorizontalAlignment="Center" FontSize="14" FontWeight="Bold" Grid.Column="1"/>
+                                <TextBlock Text="{Binding CourseHour}" Foreground="#3F4C5D"  VerticalAlignment="Center" 
+                               HorizontalAlignment="Center" FontSize="14" FontWeight="Bold" Grid.Column="2"/>
+                                <Button Content="删除" Grid.Row="6" Height="20" Width="50"  Foreground="White" FontSize="16"
+                                        Template="{StaticResource CommitButtonTemplate}" Cursor="Hand" Grid.Column="3"
+                                        Command="{Binding DataContext.DeleteCourseInfoCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}, Mode=FindAncestor}}" 
+                                        CommandParameter="{Binding CourseID}"/>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+
+    </Grid>
+</UserControl>
